@@ -14,15 +14,6 @@ def initialize_integration():
     """
     logging.info("Initializing integration with GitHub Spark...")
 
-def list_routes():
-    """
-    List all registered routes in the application.
-    """
-    routes = []
-    for rule in app.url_map.iter_rules():
-        routes.append(str(rule))
-    return jsonify(routes), 200
-
 @app.route('/list_routes', methods=['GET'])
 def list_routes():
     """
@@ -33,7 +24,7 @@ def list_routes():
         routes.append(str(rule))
     return jsonify(routes), 200
 
-def create_api_endpoints():
+def create_api_endpoints():  
     """
     Define API endpoints for integrating GitHub Spark functionalities and Microsoft Foundry.
     This function will create or modify existing endpoints to leverage both services.
@@ -242,11 +233,14 @@ def create_api_endpoints():
         return jsonify({"message": "User permissions managed successfully with NVIDIA ENVY LINK!"}), 200
 
     @app.route('/rubin_integration', methods=['POST'])
-    def rubin_integration():
+    def rubin_integration():  
         """
         Endpoint to handle integration requests with NVIDIA RUBIN.
         """
-        logging.info("Integration with NVIDIA RUBIN successful!")
+        data = request.json  
+        if not data or 'rubin_id' not in data:  
+            return jsonify({"error": "Invalid input, 'rubin_id' is required."}), 400  
+        logging.info("Integration with NVIDIA RUBIN successful!")  
         return jsonify({"message": "Integration with NVIDIA RUBIN successful!"}), 200
 
     @app.route('/rubin_data', methods=['POST'])
